@@ -1,7 +1,7 @@
 import pymclevel
 import pymclevel.nbt as nbt
-from pymclevel import TAG_List, TAG_Byte, TAG_Int, TAG_Compound, TAG_Short
-from pymclevel import TAG_Double, TAG_Float, TAG_String, TAG_Long, TAG_Int_Array, TAG_Byte_Array
+from pymclevel import TAG_List, TAG_Byte, TAG_Int, TAG_Compound, TAG_Short, TAG_Double
+from pymclevel import TAG_Float, TAG_String, TAG_Long, TAG_Int_Array, TAG_Byte_Array
 import os
 import collections
 import itertools
@@ -71,6 +71,9 @@ def performLine(level, box, options):
 # has a "Direction" tag or not. I think it removes these in 1.8, replacing
 # it with "Facing". Might need to make two scripts/ an option for pre-1.8/1.8
 # "Dir" is also removed in 1.8
+
+# I should really just support 1.7, as I don't have the map colours for 1.8 anyway.
+# Or I should make a 1.8-mode tick box. But the conversion bug should be squelched soon hopefully.
 
 
 def performfoo(level, box, options):
@@ -151,7 +154,6 @@ def genWallMap(level, box, options):
         mapCount = idcountsTag["map"].value
     else:
         mapCount = -1
-        #something
         
     if gridAlign:
         wallMapCentreX = int(round(wallMapCentreX/8.0))*8
@@ -159,11 +161,11 @@ def genWallMap(level, box, options):
     
     # if the box is not 1 thick
     if box.width != 1 and box.length != 1:
-        raise Exception("The box needs to be 1 thick")
+        raise Exception("The selection box needs to be 1 block thick")
     
     for chunk, slices, point in level.getChunkSlices(box):
         if chunk.Blocks[slices].any():
-            raise Exception("The box should be air")
+            raise Exception("The selection box should be clear of blocks")
     
     # facing
     # 0 : south, +x map left to right
@@ -197,7 +199,9 @@ def genWallMap(level, box, options):
         wallMapWidth = box.width
     wallMapHeight = box.height
     
-    print "Facing: ", facing
+    for chunk, slices, point in level.getChunkSlices(pymclevel.box.BoundingBox(box.origin + (1*[0, 1, 0, -1][facing], 0, 1*[-1, 0, 1, 0][facing], box.size))):
+        if not chunk[slices].all():
+            raise Exception("The selection box should be against a wall")
     
     def itemFramePosIter(box, facing):
         if facing == 0:
@@ -248,8 +252,8 @@ def genWallMap(level, box, options):
     
     upDir = {"North":2, "East":3, "South":0, "West":1}[options["Up is"]]
     
-    # Map rotations go up to 7 even though visually there are
-    # only 4 rotations
+    # in 14w30c map rotations go up to 7 even though visually there are
+    # only 4 rotations, due to a bug, and new 45 degree rotations.
     itemRotation = [2, 1, 0, 3][upDir]
     progressBarMapCount = 0
     numMaps = wallMapWidth * wallMapHeight
@@ -389,16 +393,13 @@ def render_map(level, maptag):
                 
                 if (num >> 20 & 1) == 0:
                     # Dirt
-                    colorCounter[getMapColorIndex(3)] = 10
+                    colorCounter[mapColours[3,0]] = 10
                 else:
                     # Stone
-                    colorCounter[getMapColorIndex(1)] = 100
+                    colorCounter[mapColours[1, 0]] = 100
             else:
                 for i in xrange(blocksPerPixel):
-                    for j in xrange(blocksPerPixel):
-                        # Assuming minecraft and mcedit heightmaps are the same.
-                        # I beleive they are.
-                        
+                    for j in xrange(blocksPerPixel):                        
                         columnHeight = heightMap[j + zChunkStartBlock, i + xChunkStartBlock] + 1
                         block = 0
                         data = 0
@@ -408,10 +409,10 @@ def render_map(level, maptag):
                                 columnHeight -= 1
                                 block = getBlockChunk(chunk, i + xChunkStartBlock, columnHeight, j + zChunkStartBlock)
                                 data = getBlockDataChunk(chunk, i + xChunkStartBlock, columnHeight, j + zChunkStartBlock)
-                                if not (getMapColorIndex(block, data) == 0 and columnHeight > 0):
+                                if not (mapColours[block, data] == 0 and columnHeight > 0):
                                     break
                             
-                            # Sub-surface stuff
+                            # Sub-surface for liquids
                             if (columnHeight > 0 and block in liquids):
                                 subHeight = columnHeight - 1
                                 
@@ -422,9 +423,9 @@ def render_map(level, maptag):
                                     if not (subHeight > 0 and subBlock in liquids):
                                         break
                                         
-                        # Make sure this stuff is floats
+                        # Make sure this variable is a float
                         averageColumnHeight += float(columnHeight) / (blocksPerPixel * blocksPerPixel)
-                        colorCounter[getMapColorIndex(block, data)] += 1
+                        colorCounter[mapColours[block, data]] += 1
                         
             subBlockPixelAverage /= blocksPerPixel * blocksPerPixel
 
@@ -466,18 +467,6 @@ def getBlockChunk(chunk, x, y, z):
 
 def getBlockDataChunk(chunk, x, y, z):
     return chunk.Data[x, z, y]
-
-# Maps id, data to their map colour
-def getMapColorIndex(blockid, data=0):
-    #~ try:
-        #~ return colorMap[(blockid, data)]
-    #~ except KeyError:
-        #~ try:
-            #~ return colorMap[(blockid, 0)]
-        #~ except KeyError:
-            #~ # Default of stone colour
-            #~ return 11
-    return mapColours[blockid, data]
 
 colorMap = {
     (0, 0) : 0,
@@ -683,6 +672,7 @@ colorMap = {
     (174, 0) : 5,
     (175, 0) : 7
 }
+
 
 placedIDsMask = numpy.zeros((256, 16), bool)
 mapColours = numpy.zeros((256, 16), numpy.ubyte)
