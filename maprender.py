@@ -24,6 +24,7 @@ displayName = "Render Maps"
 
 actionTab = (
     ("Action", "title"),
+    ("Created by Majaha", "label"),
     ("Pick Action", (
         "Render Maps In Box",
         "Update All Maps",
