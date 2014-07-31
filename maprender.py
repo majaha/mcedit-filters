@@ -3,6 +3,8 @@
 # If you redistribute or modify, please give credit to Majaha.
 #
 # Github Link: https://github.com/majaha/mcedit-filters
+#
+# Version 0.0
 
 import pymclevel
 import pymclevel.nbt as nbt
