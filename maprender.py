@@ -397,17 +397,17 @@ def render_map(level, maptag):
                     # Stone
                     colorCounter[mapColours[1, 0]] = 100
             else:
-                for i in xrange(blocksPerPixel):
-                    for j in xrange(blocksPerPixel):                        
-                        columnHeight = heightMap[j + zChunkStartBlock, i + xChunkStartBlock] + 1
+                for i in xrange(xChunkStartBlock, xChunkStartBlock + blocksPerPixel):
+                    for j in xrange(zChunkStartBlock, zChunkStartBlock + blocksPerPixel):
+                        columnHeight = heightMap[j, i] + 1
                         block = 0
                         data = 0
                         
                         if columnHeight > 1:
                             while True:
                                 columnHeight -= 1
-                                block = getBlockChunk(chunk, i + xChunkStartBlock, columnHeight, j + zChunkStartBlock)
-                                data = getBlockDataChunk(chunk, i + xChunkStartBlock, columnHeight, j + zChunkStartBlock)
+                                block = getBlockChunk(chunk, i, columnHeight, j)
+                                data = getBlockDataChunk(chunk, i, columnHeight, j)
                                 if not (mapColours[block, data] == 0 and columnHeight > 0):
                                     break
                             
@@ -416,7 +416,7 @@ def render_map(level, maptag):
                                 subHeight = columnHeight - 1
                                 
                                 while True:
-                                    subBlock = getBlockChunk(chunk, i + xChunkStartBlock, subHeight, j + zChunkStartBlock)
+                                    subBlock = getBlockChunk(chunk, i, subHeight, j)
                                     subHeight -= 1
                                     subBlockPixelAverage += 1
                                     if not (subHeight > 0 and subBlock in liquids):
