@@ -1,3 +1,9 @@
+# This MCEdit filter renders maps, or makes item frame maps
+# and was created by Majaha.
+# If you redistribute or modify, please give credit to Majaha.
+#
+# Github Link: https://github.com/majaha/mcedit-filters
+
 import pymclevel
 import pymclevel.nbt as nbt
 from pymclevel import TAG_List, TAG_Byte, TAG_Int, TAG_Compound, TAG_Short, TAG_Double
