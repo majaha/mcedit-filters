@@ -1,6 +1,7 @@
 # This MCEdit filter renders maps, or makes item frame maps
 # and was created by Majaha.
-# If you redistribute or modify, please give credit to Majaha.
+# Feel free to redistribute or modify,
+# but if you do please give credit to Majaha.
 #
 # Github Link: https://github.com/majaha/mcedit-filters
 #
