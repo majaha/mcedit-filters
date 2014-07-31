@@ -34,8 +34,7 @@ wallMapTab = (
     ("Selects whether to align maps to the grid default maps align to.", "label"),
     ("Align with Grid", True),
     ("Up is", ("North", "East", "South", "West")),
-    ("Render Maps", True),
-    ("Make Map Copies Chest", True) # Should I do this?
+    ("Render Maps", True)
 )
 
 inputs = [actionTab, wallMapTab]
@@ -61,7 +60,7 @@ def performLine(level, box, options):
 # try to make spelling consistant
 
 # Use slices to run down block columns perhaps?
-# make sure there is a backing in wall map gen
+
 # think about 1.7 - 1.8 id compatability
 
 # it seems in 1.8 (snapshot) the item frame TileX, Y, Z are of the block
