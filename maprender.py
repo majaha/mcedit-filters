@@ -67,24 +67,6 @@ def performLine(level, box, options):
     profiler.runctx("performfoo(level, box, options)", globals(), locals())
     profiler.print_stats()
 
-# try to make spelling consistant
-
-# Use slices to run down block columns perhaps?
-
-# think about 1.7 - 1.8 id compatability
-
-# it seems in 1.8 (snapshot) the item frame TileX, Y, Z are of the block
-# the item frame is in, not the one it's on.
-# 1.8 fixes 1.7-made item frame entities when they are loaded
-# it tells 1.7 ones apart from 1.8 ones by whether the item frame entity
-# has a "Direction" tag or not. I think it removes these in 1.8, replacing
-# it with "Facing". Might need to make two scripts/ an option for pre-1.8/1.8
-# "Dir" is also removed in 1.8
-
-# I should really just support 1.7, as I don't have the map colours for 1.8 anyway.
-# Or I should make a 1.8-mode tick box. But the conversion bug should be squelched soon hopefully.
-
-
 def performfoo(level, box, options):
     operation = options["Pick Action"]
     
@@ -261,8 +243,6 @@ def genWallMap(level, box, options):
     
     upDir = {"North":2, "East":3, "South":0, "West":1}[options["Up is"]]
     
-    # in 14w30c map rotations go up to 7 even though visually there are
-    # only 4 rotations, due to a bug, and new 45 degree rotations.
     itemRotation = [2, 1, 0, 3][upDir]
     progressBarMapCount = 0
     numMaps = wallMapWidth * wallMapHeight
@@ -447,9 +427,6 @@ def render_map(level, maptag):
             if brightnessValue < -0.6:
                 brightnessIndex = 0
 
-            # The maps are not perfect because when there is a draw
-            # pythons Counter does not give the same order as
-            # Guava's HashMultiet
             baseColor = colorCounter.most_common(1)[0][0]
 
             # Water
