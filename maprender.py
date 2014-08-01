@@ -27,7 +27,7 @@ actionTab = (
     ("Created by Majaha", "label"),
     ("Pick Action", (
         "Render Maps In Box",
-        "Update All Maps",
+        "Render All Maps",
         "Render Map by Number",
         "Generate Wall Map"
         )
@@ -72,7 +72,7 @@ def performfoo(level, box, options):
     
     if operation == "Render Maps In Box":
         level.showProgress("Rendering Maps in box", renderMapsInBox(level, box))
-    elif operation == "Update All Maps":
+    elif operation == "Render All Maps":
         level.showProgress("Rendering All Maps", renderAllMaps(level))
     elif operation == "Render Map by Number":
         mapID = options["Map to Render"]
