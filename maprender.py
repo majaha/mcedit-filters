@@ -7,7 +7,7 @@
 #
 # Version 0.0
 
-# This filter currently only supports Minecraft 1.7.
+# This filter currently only fully supports Minecraft 1.7.
 # As of 1.8 snapshot 14w31a, there is a bug in upgrading maps
 # in item frames from the 1.7 format to the 1.8 format, resulting in
 # incorectly rotated maps (I talk about this in the comments of bug MC-45892).
