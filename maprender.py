@@ -80,7 +80,11 @@ def renderMapsInBox(level, box):
     for ent in level.getEntitiesInBox(box):
         if "Item" in ent and ent["Item"]["id"].value in (358, "minecraft:filled_map"):
             mapIDSet.add(ent["Item"]["Damage"].value)
-    
+        
+        if "Items" in ent:
+                for item in ent["Items"]:
+                    if item["id"].value in (358, "minecraft:filled_map"):
+                        mapIDSet.add(item["Damage"].value)
     
     numMaps = len(mapIDSet)
     mapCount = 0
