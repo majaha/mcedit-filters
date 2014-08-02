@@ -26,3 +26,7 @@ only 4 rotations, due to a bug, and new 45 degree rotations.
 The map rendering is not perfect because when there is a tie
 pythons Counter does not give the same order as
 Guava's HashMultiet
+
+Completion time prediction by time averaging is broken when rendering maps of different scales,
+because larger maps take longer to render but are considered the same by the progress bar.
+But it's more bother than it's worth to fix, so I'm leaving it.
