@@ -55,7 +55,7 @@ def perform(level, box, options):
 def performProf(level, box, options):
     pr = cProfile.Profile()
     pr.enable()
-    performfoo(level, box, options)
+    performFoo(level, box, options)
     pr.disable()
     ps = pstats.Stats(pr)
     ps.sort_stats("tottime")
@@ -63,11 +63,11 @@ def performProf(level, box, options):
     
 
 def performLine(level, box, options):
-    profiler = line_profiler.LineProfiler(render_map)
-    profiler.runctx("performfoo(level, box, options)", globals(), locals())
+    profiler = line_profiler.LineProfiler(renderMap)
+    profiler.runctx("performFoo(level, box, options)", globals(), locals())
     profiler.print_stats()
 
-def performfoo(level, box, options):
+def performFoo(level, box, options):
     operation = options["Pick Action"]
     
     if operation == "Render Maps In Box":
@@ -99,7 +99,7 @@ def renderMapsInBox(level, box):
     for mapid in mapIDSet:
         maptag = loadMapTag(level, mapid)
         if maptag:
-            for col in render_map(level, maptag):
+            for col in renderMap(level, maptag):
                 yield mapCount*128 + col, numMaps * 128, "Maps: "+str(mapCount)+"/"+str(numMaps)
             saveMapTag(level, maptag, mapid)
         mapCount += 1
@@ -117,7 +117,7 @@ def renderAllMaps(level):
     numMaps = len(mapIDSet)
     for mapID in mapIDSet:
         maptag = nbt.load(os.path.join(dataPath, f))
-        for col in render_map(level, maptag):
+        for col in renderMap(level, maptag):
             yield mapCount*128 + col, numMaps*128, "Maps: "+str(mapCount)+"/"+str(numMaps)
         saveMapTag(level, maptag, mapID)
         mapCount += 1
@@ -125,7 +125,7 @@ def renderAllMaps(level):
 def renderMapByNum(level, mapid):
     mapTag = loadMapTag(level, mapid)
     if mapTag is not None:
-        for cols in render_map(level, maptag):
+        for cols in renderMap(level, maptag):
             yield cols, 128
         saveMapTag(level, maptag, mapid)
 
@@ -251,7 +251,7 @@ def genWallMap(level, box, options):
         mapCount += 1
         mapTag = makeMapTag(*mapCentre, scale=mapScale)
         if renderMaps:
-            for column in render_map(level, mapTag):
+            for column in renderMap(level, mapTag):
                 yield progressBarMapCount * 128 + column, numCols, "Map: "+str(progressBarMapCount)+"/"+str(numMaps)
         saveMapTag(level, mapTag, mapCount)
         
@@ -334,7 +334,7 @@ def makeMapItemTag(mapID):
     itemTag["Count"] = TAG_Byte(1)
     return itemTag
 
-def render_map(level, maptag):
+def renderMap(level, maptag):
     scale = maptag["data"]["scale"].value
     dimension = maptag["data"]["dimension"].value
     xCenter = maptag["data"]["xCenter"].value
