@@ -24,9 +24,9 @@ import collections
 import itertools
 import numpy
 
-import line_profiler
-import cProfile
-import pstats
+#import line_profiler
+#import cProfile
+#import pstats
 
 displayName = "Render Maps"
 
@@ -41,6 +41,7 @@ actionTab = (
         "Generate Wall Map"
         )
     ),
+    ("If rendering map by number:", "label"),
     ("Map to Render", (0, 0, 65536))
 )
 
@@ -59,7 +60,7 @@ wallMapTab = (
 inputs = [actionTab, wallMapTab]
 
 def perform(level, box, options):
-    performLine(level, box, options)
+    performFoo(level, box, options)
 
 def performProf(level, box, options):
     pr = cProfile.Profile()
@@ -143,7 +144,6 @@ def genWallMap(level, box, options):
     wallMapCentreX = options["x"]
     wallMapCentreZ = options["z"]
     gridAlign = options["Align with Grid"]
-    makeCopiesChest = options["Make Map Copies Chest"]
     renderMaps = options["Render Maps"]
     
     dataFolder = level.worldFolder.getFilePath("data")
@@ -200,7 +200,7 @@ def genWallMap(level, box, options):
     wallMapHeight = box.height
     
     for chunk, slices, point in level.getChunkSlices(pymclevel.box.BoundingBox(box.origin + (1*[0, 1, 0, -1][facing], 0, 1*[-1, 0, 1, 0][facing], box.size))):
-        if not chunk[slices].all():
+        if not chunk.Blocks[slices].all():
             raise Exception("The selection box should be against a wall")
     
     def itemFramePosIter(box, facing):
@@ -328,7 +328,6 @@ def makeItemFrameEntity(x, y, z, facing, itemtag=None, itemRotation=0):
     itemFrame["TileX"] = TAG_Int(x + [0, 1, 0, -1][facing])
     itemFrame["TileY"] = TAG_Int(y)
     itemFrame["TileZ"] = TAG_Int(z + [-1, 0, 1, 0][facing])
-    itemFrame["Facing"] = TAG_Byte(facing)
     itemFrame["Direction"] = TAG_Byte(facing)
     if itemtag:
         itemFrame["Item"] = itemtag
