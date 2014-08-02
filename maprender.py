@@ -38,7 +38,8 @@ actionTab = (
         )
     ),
     ("If rendering map by number:", "label"),
-    ("Map to Render", (0, 0, 65536))
+    ("Map to Render", (0, 0, 65536)),
+    ("Warning: Map rendering cannot be undone", "label")
 )
 
 wallMapTab = (
@@ -103,12 +104,12 @@ def renderAllMaps(level):
     for f in os.listdir(dataPath):
         match = re.match(r"map_([0-9]+)\.dat$", f)
         if match:
-            set.add(int(match.group(1)))
+            mapIDSet.add(int(match.group(1)))
     
     mapCount = 0
     numMaps = len(mapIDSet)
     for mapID in mapIDSet:
-        maptag = nbt.load(os.path.join(dataPath, f))
+        maptag = loadMapTag(level, mapID)
         for col in renderMap(level, maptag):
             yield mapCount*128 + col, numMaps*128, "Maps: "+str(mapCount)+"/"+str(numMaps)
         saveMapTag(level, maptag, mapID)
