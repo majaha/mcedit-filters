@@ -48,7 +48,7 @@ wallMapTab = (
     ("Centre of the Wall Map:", "label"),
     ("x", 0),
     ("z", 0),
-    ("Selects whether to align maps to the grid that default maps align to.", "label"),
+    ("Selects whether to align maps to the grid that default maps align to:", "label"),
     ("Align with Grid", True),
     ("Up is", ("North", "East", "South", "West")),
     ("Render Maps", True)
