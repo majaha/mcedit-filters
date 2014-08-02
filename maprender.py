@@ -24,10 +24,6 @@ import collections
 import itertools
 import numpy
 
-#import line_profiler
-#import cProfile
-#import pstats
-
 displayName = "Render Maps"
 
 actionTab = (
@@ -60,24 +56,6 @@ wallMapTab = (
 inputs = [actionTab, wallMapTab]
 
 def perform(level, box, options):
-    performFoo(level, box, options)
-
-def performProf(level, box, options):
-    pr = cProfile.Profile()
-    pr.enable()
-    performFoo(level, box, options)
-    pr.disable()
-    ps = pstats.Stats(pr)
-    ps.sort_stats("tottime")
-    ps.print_stats(30)
-    
-
-def performLine(level, box, options):
-    profiler = line_profiler.LineProfiler(renderMap)
-    profiler.runctx("performFoo(level, box, options)", globals(), locals())
-    profiler.print_stats()
-
-def performFoo(level, box, options):
     operation = options["Pick Action"]
     
     if operation == "Render Maps In Box":
