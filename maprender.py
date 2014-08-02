@@ -116,8 +116,8 @@ def renderAllMaps(level):
         mapCount += 1
 
 def renderMapByNum(level, mapid):
-    mapTag = loadMapTag(level, mapid)
-    if mapTag is not None:
+    maptag = loadMapTag(level, mapid)
+    if maptag is not None:
         for cols in renderMap(level, maptag):
             yield cols, 128
         saveMapTag(level, maptag, mapid)
