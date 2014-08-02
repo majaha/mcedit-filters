@@ -7,6 +7,14 @@
 #
 # Version 0.0
 
+# This filter currently only supports Minecraft 1.7.
+# As of 1.8 snapshot 14w31a, there is a bug in upgrading maps
+# in item frames from the 1.7 format to the 1.8 format, resulting in
+# incorectly rotated maps (I talk about this in the comments of bug MC-45892).
+# In future versions, this may be fixed, in which case Minecraft should be
+# able to convert the output of this filter just fine, but some new blocks
+# might be the wrong colour.
+
 import pymclevel
 import pymclevel.nbt as nbt
 from pymclevel import TAG_List, TAG_Byte, TAG_Int, TAG_Compound, TAG_Short, TAG_Double
@@ -663,6 +671,7 @@ colorMap = {
 
 placedIDsMask = numpy.zeros((256, 16), bool)
 mapColours = numpy.zeros((256, 16), numpy.ubyte)
+mapColours.fill(11)
 for (blockID, data), mapColour in colorMap.iteritems():
     mapColours[blockID, data] = mapColour
     placedIDsMask[blockID, data] = True
@@ -671,8 +680,6 @@ for (blockID, data), mask in numpy.ndenumerate(placedIDsMask):
     if not mask:
         if placedIDsMask[blockID, 0]:
             mapColours[blockID, data] = mapColours[blockID, 0]
-        else:
-            mapColours[blockID, data] = 11
 
 # List of liquid ids
 liquids = (8, 9, 10, 11)
