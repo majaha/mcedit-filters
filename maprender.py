@@ -5,7 +5,7 @@
 #
 # Github Link: https://github.com/majaha/mcedit-filters
 #
-# Version 0.0
+VERSION = "Version 0.0"
 
 # This filter currently only fully supports Minecraft 1.7.
 # As of 1.8 snapshot 14w31a, there is a bug in upgrading maps
@@ -29,7 +29,7 @@ displayName = "Render Maps"
 actionTab = (
     ("Action", "title"),
     ("Created by Majaha", "label"),
-    ("Version 0.0", "label"),
+    (VERSION, "label"),
     ("Pick Action", (
         "Render Maps In Box",
         "Render All Maps",
