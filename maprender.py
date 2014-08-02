@@ -30,7 +30,7 @@ actionTab = (
     ("Action", "title"),
     ("Created by Majaha", "label"),
     (VERSION, "label"),
-    ("Pick Action", (
+    ("Pick Action:", (
         "Render Maps In Box",
         "Render All Maps",
         "Render Map by Number",
@@ -57,7 +57,7 @@ wallMapTab = (
 inputs = [actionTab, wallMapTab]
 
 def perform(level, box, options):
-    operation = options["Pick Action"]
+    operation = options["Pick Action:"]
     
     if operation == "Render Maps In Box":
         level.showProgress("Rendering Maps in box", renderMapsInBox(level, box))
