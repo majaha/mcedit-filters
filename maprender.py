@@ -99,7 +99,10 @@ def renderMapsInBox(level, box):
             
 def renderAllMaps(level):
     import re
-    dataPath = level.worldFolder.getFilePath("data")
+    if level.dimNo == 0:
+        dataPath = level.worldFolder.getFolderPath("data")
+    else:
+        dataPath = level.parentWorld.worldFolder.getFolderPath("data")
     mapIDSet = set()
     for f in os.listdir(dataPath):
         match = re.match(r"map_([0-9]+)\.dat$", f)
@@ -116,6 +119,9 @@ def renderAllMaps(level):
         mapCount += 1
 
 def renderMapByNum(level, mapid):
+    if level.dimNo != 0:
+        level = level.parentWorld
+
     maptag = loadMapTag(level, mapid)
     if maptag is not None:
         for cols in renderMap(level, maptag):
@@ -129,7 +135,10 @@ def genWallMap(level, box, options):
     gridAlign = options["Align with Grid"]
     renderMaps = options["Render Maps"]
     
-    dataFolder = level.worldFolder.getFilePath("data")
+    if dimNo != 0:
+        dataFolder = level.parentWorld.worldFolder.getFolderPath("data")
+    else:
+        dataFolder = level.worldFolder.getFolderPath("data")
     
     if os.path.exists(os.path.join(dataFolder, "idcounts.dat")):
         idcountsTag = nbt.load(os.path.join(dataFolder, "idcounts.dat"))
